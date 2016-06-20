@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "289371395375",
+    "firebase_url": "https://project-4640347631861502445.firebaseio.com",
+    "project_id": "project-4640347631861502445",
+    "storage_bucket": "project-4640347631861502445.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289371395375:android:de1f1d59a5ea805a",
+        "android_client_info": {
+          "package_name": "com.lifeinvader.tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289371395375-i9dt9a44aj98li1ssc2s58i9ihcqd9cm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0UigHl36bL9egixXK9p_DrTEREj7KiTM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
