@@ -59,7 +59,7 @@ public class GroupDetailActivity extends AppCompatActivity {
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
-                .add(R.id.group_detail_container, fragment)
+                .add(R.id.group_users_container, fragment)
                 .commit();
         }
     }

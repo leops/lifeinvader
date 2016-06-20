@@ -29,14 +29,16 @@ public class GroupsAdapter extends FirebaseRecyclerAdapter<GroupsAdapter.ViewHol
         this.activity = activity;
     }
 
-    @Override public GroupsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override
+    public GroupsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.group_list_content, parent, false);
 
         return new ViewHolder(view);
     }
 
-    @Override public void onBindViewHolder(final GroupsAdapter.ViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(final GroupsAdapter.ViewHolder holder, int position) {
         Group item = getItem(position);
         holder.mItem = item;
         holder.textViewName.setText(item.name);
@@ -64,20 +66,24 @@ public class GroupsAdapter extends FirebaseRecyclerAdapter<GroupsAdapter.ViewHol
         });
     }
 
-    @Override protected void itemAdded(Group item, String key, int position) {
+    @Override
+    protected void itemAdded(Group item, String key, int position) {
         item.key = key;
     }
 
-    @Override protected void itemChanged(Group oldItem, Group newItem, String key, int position) {
-        Log.d("MyAdapter", "Changed an item.");
+    @Override
+    protected void itemChanged(Group oldItem, Group newItem, String key, int position) {
+        newItem.key = key;
     }
 
-    @Override protected void itemRemoved(Group item, String key, int position) {
-        Log.d("MyAdapter", "Removed an item from the adapter.");
+    @Override
+    protected void itemRemoved(Group item, String key, int position) {
+        // NOOP
     }
 
-    @Override protected void itemMoved(Group item, String key, int oldPosition, int newPosition) {
-        Log.d("MyAdapter", "Moved an item.");
+    @Override
+    protected void itemMoved(Group item, String key, int oldPosition, int newPosition) {
+        // NOOP
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -90,11 +96,6 @@ public class GroupsAdapter extends FirebaseRecyclerAdapter<GroupsAdapter.ViewHol
             super(view);
             mView = view;
             textViewName = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + textViewName.getText() + "'";
         }
     }
 }
