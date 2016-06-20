@@ -3,4 +3,5 @@
     <string name="title_group_detail">Group Detail</string>
     <string name="title_placeholder_list">Placeholders</string>
     <string name="title_placeholder_detail">Placeholder Detail</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

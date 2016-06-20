@@ -46,7 +46,7 @@ public class GroupsAdapter extends FirebaseRecyclerAdapter<GroupsAdapter.ViewHol
             public void onClick(View v) {
                 if (activity.twoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putParcelable(GroupDetailFragment.ARG_ITEM, holder.mItem);
+                    arguments.putString(GroupDetailFragment.ARG_ITEM, holder.mItem.key);
                     GroupDetailFragment fragment = new GroupDetailFragment();
 
                     fragment.setArguments(arguments);
@@ -56,7 +56,7 @@ public class GroupsAdapter extends FirebaseRecyclerAdapter<GroupsAdapter.ViewHol
                 } else {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, GroupDetailActivity.class);
-                    intent.putExtra(GroupDetailFragment.ARG_ITEM, holder.mItem);
+                    intent.putExtra(GroupDetailFragment.ARG_ITEM, holder.mItem.key);
 
                     context.startActivity(intent);
                 }
@@ -65,7 +65,7 @@ public class GroupsAdapter extends FirebaseRecyclerAdapter<GroupsAdapter.ViewHol
     }
 
     @Override protected void itemAdded(Group item, String key, int position) {
-        Log.d("MyAdapter", "Added a new item to the adapter.");
+        item.key = key;
     }
 
     @Override protected void itemChanged(Group oldItem, Group newItem, String key, int position) {
