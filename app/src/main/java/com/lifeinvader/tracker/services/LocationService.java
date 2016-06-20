@@ -1,4 +1,4 @@
-package com.lifeinvader.tracker;
+package com.lifeinvader.tracker.services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -15,9 +15,6 @@ import rx.functions.Action1;
 
 public class LocationService extends Service {
     private Subscription mSubscription;
-
-    public LocationService() {
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

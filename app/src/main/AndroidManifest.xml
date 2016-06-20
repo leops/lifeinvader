@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lifeinvader.tracker">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -31,7 +30,6 @@
         <activity
             android:name=".activities.GroupDetailActivity"
             android:label="@string/title_group_detail"
-            android:parentActivityName=".activities.GroupListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -43,11 +41,11 @@
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.lifeinvader.tracker.activities.GroupDetailActivity" />
+                android:value=".activities.GroupDetailActivity" />
         </activity>
 
         <service
-            android:name=".LocationService"
+            android:name=".services.LocationService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.ACCESS_COARSE_LOCATION">
@@ -55,6 +53,11 @@
                 <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".services.AuthService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

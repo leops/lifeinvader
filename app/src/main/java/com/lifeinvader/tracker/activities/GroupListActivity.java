@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.firebase.client.Firebase;
-import com.lifeinvader.tracker.LocationService;
+import com.lifeinvader.tracker.services.LocationService;
 import com.lifeinvader.tracker.R;
 import com.lifeinvader.tracker.adapters.GroupsAdapter;
 import com.lifeinvader.tracker.models.Group;
