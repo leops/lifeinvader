@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,7 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.GroupDetailActivity"
             android:label="@string/title_group_detail"
@@ -35,7 +39,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.GroupListActivity" />
         </activity>
-
         <activity
             android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps">
@@ -43,6 +46,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.GroupDetailActivity" />
         </activity>
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="@string/title_activity_login" />
 
         <service
             android:name=".services.LocationService"
@@ -53,11 +59,6 @@
                 <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
             </intent-filter>
         </service>
-
-        <service
-            android:name=".services.AuthService"
-            android:enabled="true"
-            android:exported="true" />
     </application>
 
 </manifest>
