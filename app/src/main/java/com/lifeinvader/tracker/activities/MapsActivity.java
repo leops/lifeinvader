@@ -1,37 +1,35 @@
 package com.lifeinvader.tracker.activities;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.FragmentActivity;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lifeinvader.tracker.R;
 import com.lifeinvader.tracker.fragments.GroupDetailFragment;
 import com.lifeinvader.tracker.models.User;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+/**
+ * Affiche la position des membres d'un groupe sur une carte Google Maps
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
     private Map<String, Marker> mapMarkers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Firebase.setAndroidContext(this);
 
         setContentView(R.layout.activity_maps);
 
@@ -45,14 +43,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(final GoogleMap map) {
         mapMarkers = new HashMap<>();
 
-        final Firebase dbRef = new Firebase("https://project-4640347631861502445.firebaseio.com/");
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
         String groupKey = getIntent().getStringExtra(GroupDetailFragment.ARG_ITEM);
-        dbRef.child("groups").child(groupKey).child("users").addChildEventListener(new ChildEventListener() {
+        database.getReference("groups").child(groupKey).child("users").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String k) {
                 final String userKey = dataSnapshot.getValue(String.class);
-                dbRef.child("users").child(userKey).addValueEventListener(new ValueEventListener() {
+                database.getReference("users").child(userKey).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);
@@ -73,7 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError firebaseError) {
+                    public void onCancelled(DatabaseError databaseError) {
                         //
                     }
                 });
@@ -102,7 +100,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onCancelled(DatabaseError databaseError) {
                 //
             }
         });

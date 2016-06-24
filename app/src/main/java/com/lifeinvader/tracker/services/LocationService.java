@@ -4,15 +4,28 @@ import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.location.LocationRequest;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action1;
 
+/**
+ * Le service de localisation est lancé lors du premier lancement de l'application ou au démarrage
+ * de l'appareil. Il suit la position de manière passive et met a jour la base de données.
+ */
 public class LocationService extends Service {
     private Subscription mSubscription;
 
@@ -29,20 +42,40 @@ public class LocationService extends Service {
 
         super.onCreate();
 
-        ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(this);
+        FirebaseApp app = FirebaseApp.initializeApp(this, FirebaseOptions.fromResource(this));
+        final FirebaseDatabase database = FirebaseDatabase.getInstance(app);
+        FirebaseAuth auth = FirebaseAuth.getInstance(app);
 
-        LocationRequest request = LocationRequest.create()
-            .setPriority(LocationRequest.PRIORITY_LOW_POWER)
-            .setNumUpdates(5)
-            .setInterval(100);
+        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null) {
+                    final DatabaseReference userRef = database.getReference("users").child(user.getUid());
 
-        mSubscription = locationProvider.getUpdatedLocation(request)
-            .subscribe(new Action1<Location>() {
-                @Override
-                public void call(Location location) {
-                    Log.d("LocationService", location.getLatitude() + ", " + location.getLongitude());
+                    ReactiveLocationProvider locationProvider = new ReactiveLocationProvider(LocationService.this);
+
+                    LocationRequest request = LocationRequest.create()
+                        .setPriority(LocationRequest.PRIORITY_LOW_POWER)
+                        .setNumUpdates(5)
+                        .setInterval(100);
+
+                    mSubscription = locationProvider.getUpdatedLocation(request)
+                        .subscribe(new Action1<Location>() {
+                            @Override
+                            public void call(Location location) {
+                                Map<String, Object> payload = new HashMap<>();
+                                payload.put("latitude", location.getLatitude());
+                                payload.put("longitude", location.getLongitude());
+
+                                userRef.updateChildren(payload);
+                            }
+                        });
+                } else {
+                    stopSelf();
                 }
-            });
+            }
+        });
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.lifeinvader.tracker.fragments;
 
 import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,10 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lifeinvader.tracker.R;
 import com.lifeinvader.tracker.adapters.UsersAdapter;
 import com.lifeinvader.tracker.models.Group;
@@ -22,8 +23,8 @@ public class GroupDetailFragment extends Fragment {
     public static final String ARG_ITEM = "group";
 
     private RecyclerView listView;
-    private Firebase firebaseRef;
-    private Firebase itemRef;
+    private FirebaseDatabase database;
+    private DatabaseReference groupRef;
 
     public GroupDetailFragment() {
     }
@@ -32,7 +33,7 @@ public class GroupDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        firebaseRef = new Firebase("https://project-4640347631861502445.firebaseio.com/");
+        database = FirebaseDatabase.getInstance();
 
         if (getArguments().containsKey(ARG_ITEM)) {
             Activity activity = this.getActivity();
@@ -40,8 +41,8 @@ public class GroupDetailFragment extends Fragment {
 
             String key = getArguments().getString(ARG_ITEM);
             if(key != null) {
-                itemRef = firebaseRef.child("groups").child(key);
-                itemRef.addValueEventListener(new ValueEventListener() {
+                groupRef = database.getReference("groups").child(key);
+                groupRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Group item = dataSnapshot.getValue(Group.class);
@@ -52,7 +53,7 @@ public class GroupDetailFragment extends Fragment {
                     }
 
                     @Override
-                    public void onCancelled(FirebaseError firebaseError) {
+                    public void onCancelled(DatabaseError databaseError) {
                         //
                     }
                 });
@@ -73,9 +74,9 @@ public class GroupDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if(itemRef != null) {
+        if(groupRef != null) {
             listView.setAdapter(new UsersAdapter(
-                firebaseRef, itemRef.child("users"), String.class, null, null
+                    database, groupRef.child("users"), String.class, null, null
             ));
         }
     }

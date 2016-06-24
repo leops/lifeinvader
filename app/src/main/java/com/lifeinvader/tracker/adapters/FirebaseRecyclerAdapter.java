@@ -5,26 +5,26 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
 public abstract class FirebaseRecyclerAdapter<ViewHolder extends RecyclerView.ViewHolder, T>
         extends RecyclerView.Adapter<ViewHolder> {
 
-    private Query mQuery;
+    private DatabaseReference mQuery;
     private Class<T> mItemClass;
     private ArrayList<T> mItems;
     private ArrayList<String> mKeys;
 
-    public FirebaseRecyclerAdapter(Query query, Class<T> itemClass) {
+    public FirebaseRecyclerAdapter(DatabaseReference query, Class<T> itemClass) {
         this(query, itemClass, null, null);
     }
 
-    public FirebaseRecyclerAdapter(Query query, Class<T> itemClass,
+    public FirebaseRecyclerAdapter(DatabaseReference query, Class<T> itemClass,
                                    @Nullable ArrayList<T> items,
                                    @Nullable ArrayList<String> keys) {
         this.mQuery = query;
@@ -130,7 +130,7 @@ public abstract class FirebaseRecyclerAdapter<ViewHolder extends RecyclerView.Vi
         }
 
         @Override
-        public void onCancelled(FirebaseError firebaseError) {
+        public void onCancelled(DatabaseError databaseError) {
             Log.e("FirebaseListAdapter", "Listen was cancelled, no more updates will occur.");
         }
     };

@@ -8,23 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
-import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lifeinvader.tracker.R;
 import com.lifeinvader.tracker.models.User;
 
 import java.util.ArrayList;
 
 public class UsersAdapter extends FirebaseRecyclerAdapter<UsersAdapter.ViewHolder, String> {
-    private final Firebase ref;
+    private final FirebaseDatabase database;
 
-    public UsersAdapter(Firebase ref, Query query, Class<String> itemClass,
+    public UsersAdapter(FirebaseDatabase database, DatabaseReference query, Class<String> itemClass,
                         @Nullable ArrayList<String> items, @Nullable ArrayList<String> keys) {
         super(query, itemClass, items, keys);
-        this.ref = ref;
+        this.database = database;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class UsersAdapter extends FirebaseRecyclerAdapter<UsersAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(final UsersAdapter.ViewHolder holder, int position) {
-        holder.setUserId(this.ref, getItem(position));
+        holder.setUserId(database, getItem(position));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class UsersAdapter extends FirebaseRecyclerAdapter<UsersAdapter.ViewHolde
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private Firebase ref;
+        private DatabaseReference ref;
         private ValueEventListener listener;
 
         public final View mView;
@@ -76,12 +76,12 @@ public class UsersAdapter extends FirebaseRecyclerAdapter<UsersAdapter.ViewHolde
             usernameView = (TextView) view.findViewById(R.id.username);
         }
 
-        public void setUserId(Firebase ref, String userId) {
+        public void setUserId(FirebaseDatabase ref, String userId) {
             if(this.ref != null && this.listener != null) {
                 this.ref.removeEventListener(this.listener);
             }
 
-            this.ref = ref.child("users").child(userId);
+            this.ref = ref.getReference("users").child(userId);
             this.listener = this.ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -90,7 +90,7 @@ public class UsersAdapter extends FirebaseRecyclerAdapter<UsersAdapter.ViewHolde
                 }
 
                 @Override
-                public void onCancelled(FirebaseError firebaseError) {
+                public void onCancelled(DatabaseError databaseError) {
                     //
                 }
             });

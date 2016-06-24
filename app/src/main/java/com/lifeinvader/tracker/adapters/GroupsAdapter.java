@@ -5,13 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.firebase.client.Query;
+import com.google.firebase.database.DatabaseReference;
 import com.lifeinvader.tracker.R;
 import com.lifeinvader.tracker.activities.GroupDetailActivity;
 import com.lifeinvader.tracker.activities.GroupListActivity;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 public class GroupsAdapter extends FirebaseRecyclerAdapter<GroupsAdapter.ViewHolder, Group> {
     private final GroupListActivity activity;
 
-    public GroupsAdapter(GroupListActivity activity, Query query, Class<Group> itemClass,
+    public GroupsAdapter(GroupListActivity activity, DatabaseReference query, Class<Group> itemClass,
                          @Nullable ArrayList<Group> items, @Nullable ArrayList<String> keys) {
         super(query, itemClass, items, keys);
         this.activity = activity;
